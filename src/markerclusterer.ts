@@ -62,6 +62,9 @@
  * @constructor
  * @extends google.maps.OverlayView
  */
+ declare const google:any;
+ // declare const cluster:any;
+
 export function MarkerClusterer(map, opt_markers, opt_options) {
   // MarkerClusterer implements google.maps.OverlayView interface. We use the
   // extend function to extend MarkerClusterer with google.maps.OverlayView
@@ -363,7 +366,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   var count = markers.length;
   var dv = count;
   while (dv !== 0) {
-    dv = parseInt(dv / 10, 10);
+    dv = parseInt((dv / 10).toString(), 10);
     index++;
   }
 
@@ -410,7 +413,7 @@ MarkerClusterer.prototype.addMarkers = function(markers, opt_nodraw) {
       this.pushMarkerTo_(marker);
     }
   } else if (Object.keys(markers).length) {
-    for (var marker in markers) {
+    for (let marker in markers) {
       this.pushMarkerTo_(markers[marker]);
     }
   }
@@ -774,9 +777,10 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
   if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
     clusterToAddTo.addMarker(marker);
   } else {
-    var cluster = new Cluster(this);
-    cluster.addMarker(marker);
-    this.clusters_.push(cluster);
+    let clusterer = <any>{}
+    clusterer = new Cluster(this);
+    clusterer.addMarker(marker);
+    this.clusters_.push(clusterer);
   }
 };
 
@@ -1101,8 +1105,8 @@ ClusterIcon.prototype.onAdd = function() {
  */
 ClusterIcon.prototype.getPosFromLatLng_ = function(latlng) {
   var pos = this.getProjection().fromLatLngToDivPixel(latlng);
-  pos.x -= parseInt(this.width_ / 2, 10);
-  pos.y -= parseInt(this.height_ / 2, 10);
+  pos.x -= parseInt((this.width_ / 2).toString(), 10);
+  pos.y -= parseInt((this.height_ / 2).toString(), 10);
   return pos;
 };
 

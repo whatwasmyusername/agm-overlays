@@ -26,6 +26,7 @@ export const template =
           *ngFor      = "let item of latLngArray;let i=index"
           [latitude]  = "item.latitude"
           [longitude] = "item.longitude"
+          [clusterOptions] = "{gridSize: 50, maxZoom: 15, imagePath:'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}"
         >
           <!-- blue html square -->
           <div style="justify-content:center;align-items:center;display:flex;width:50px;height:50px;background-color:blue;">

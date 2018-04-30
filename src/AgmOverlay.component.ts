@@ -88,9 +88,10 @@ declare var google: any
     return this._mapsWrapper.getNativeMap()
     .then(map=>{
       let clusterer = map['clusterer']
+      // debugger
       if(!clusterer){
-        // let {MarkerClusterer} = require('../scripts/markerclusterer.js')
-        let clusterer = new MarkerClusterer(map,[],this.clusterOptions)
+        // debugger
+        clusterer = new MarkerClusterer(map,[],this.clusterOptions)
         map['clusterer'] = clusterer
       }
       return clusterer
@@ -101,6 +102,7 @@ declare var google: any
   addToClusterer(overlay:any){
     this.promiseClusterer()
     .then(clusterer => {
+      // debugger
       clusterer.addMarker(overlay)
     })
   }
@@ -121,6 +123,7 @@ declare var google: any
         this.getPanes().overlayImage.appendChild( elm )
       }
 
+
       const point = this.getProjection().fromLatLngToDivPixel( latlng )
 
       if (point) {
@@ -129,9 +132,15 @@ declare var google: any
       }
     }
 
+    this.overlayView.getPosition = function(){
+        return latlng
+      }
+
     this.overlayView.setMap( map )//igniter to append to element
+
     if(this.clusterOptions){
       this.addToClusterer(this.overlayView)
     }
+
   }
 }
