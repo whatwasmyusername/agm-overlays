@@ -9,6 +9,7 @@ import {
   GoogleMapsAPIWrapper
 } from "@agm/core"
 
+import {MarkerClusterer} from './markerclusterer'
 import { GoogleMap } from "@agm/core/services/google-maps-types"
 declare var google: any
 
@@ -19,6 +20,7 @@ declare var google: any
   overlayView:any
   @Input() latitude:number
   @Input() longitude:number
+  @Input() clusterOptions:any
 
   @ViewChild('content', { read: ElementRef }) template: ElementRef
 
@@ -82,6 +84,27 @@ declare var google: any
     })
   }
 
+  promiseClusterer(){
+    return this._mapsWrapper.getNativeMap()
+    .then(map=>{
+      let clusterer = map['clusterer']
+      if(!clusterer){
+        // let {MarkerClusterer} = require('../scripts/markerclusterer.js')
+        let clusterer = new MarkerClusterer(map,[],this.clusterOptions)
+        map['clusterer'] = clusterer
+      }
+      return clusterer
+    })
+  }
+
+
+  addToClusterer(overlay:any){
+    this.promiseClusterer()
+    .then(clusterer => {
+      clusterer.addMarker(overlay)
+    })
+  }
+
   drawOnMap( map:GoogleMap ){
     this.overlayView = this.overlayView || new google.maps.OverlayView()
     const latlng = new google.maps.LatLng(this.latitude,this.longitude)
@@ -105,7 +128,10 @@ declare var google: any
         elm.style.top = (point.y - 20) + 'px'
       }
     }
-    
+
     this.overlayView.setMap( map )//igniter to append to element
+    if(this.clusterOptions){
+      this.addToClusterer(this.overlayView)
+    }
   }
 }
