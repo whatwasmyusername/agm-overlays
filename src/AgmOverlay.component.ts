@@ -21,15 +21,16 @@ declare var google: any
   overlayView:any
   elmGuts:any
   private _observableSubscriptions: Subscription[] = [];
-  
+
   @Input() latitude:number
   @Input() longitude:number
-  
+
   @Input() visible: boolean = true
   @Input() zIndex: number = 1
-  
+
   @Output() markerClick: EventEmitter<void> = new EventEmitter<void>()
   @Input() openInfoWindow: boolean = true
+  @Input() targetPane: string = "floatPane";
   @ContentChildren(AgmInfoWindow) infoWindow: QueryList<AgmInfoWindow> = new QueryList<AgmInfoWindow>()
 
   //TODO, implement this
@@ -56,7 +57,7 @@ declare var google: any
       this.onChanges = this.onChangesOverride
     })
   }
-  
+
   ngAfterContentInit() {
     this.infoWindow.changes.subscribe(() => this.handleInfoWindowUpdate());
   }
@@ -88,12 +89,12 @@ declare var google: any
     delete this.overlayView
     delete this.elmGuts
   }
-  
+
   private handleInfoWindowUpdate() {
     if (this.infoWindow.length > 1) {
       throw new Error('Expected no more than one info window.');
     }
-    
+
     this.infoWindow.forEach(iWin => {
       iWin.hostMarker = <any>this.overlayView
     });
@@ -145,14 +146,16 @@ declare var google: any
       return this.div
     }
 
+    var me = this;
+
     this.overlayView.draw = function(){
       if ( !this.div ) {
         this.div = elm
         const panes = this.getPanes()
         // if no panes then assumed not on map
-        if(!panes || !panes.overlayImage)return
+        if(!panes || !panes[me.targetPane])return
 
-        panes.overlayImage.appendChild( elm )
+        panes[me.targetPane].appendChild( elm )
       }
 
       const latlng = new google.maps.LatLng(this.latitude,this.longitude)

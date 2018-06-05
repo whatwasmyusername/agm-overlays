@@ -12,6 +12,7 @@ export declare class AgmOverlay {
     zIndex: number;
     markerClick: EventEmitter<void>;
     openInfoWindow: boolean;
+    targetPane: string;
     infoWindow: QueryList<AgmInfoWindow>;
     draggable: boolean;
     template: ElementRef;

@@ -166,6 +166,7 @@ var AgmOverlay = (function () {
         this.zIndex = 1;
         this.markerClick = new core_1.EventEmitter();
         this.openInfoWindow = true;
+        this.targetPane = "floatPane";
         this.infoWindow = new core_1.QueryList();
         //TODO, implement this
         this.draggable = false;
@@ -259,14 +260,15 @@ var AgmOverlay = (function () {
         this.overlayView.getDiv = function () {
             return this.div;
         };
+        var me = this;
         this.overlayView.draw = function () {
             if (!this.div) {
                 this.div = elm;
                 var panes = this.getPanes();
                 // if no panes then assumed not on map
-                if (!panes || !panes.overlayImage)
+                if (!panes || !panes[me.targetPane])
                     return;
-                panes.overlayImage.appendChild(elm);
+                panes[me.targetPane].appendChild(elm);
             }
             var latlng = new google.maps.LatLng(this.latitude, this.longitude);
             var proj = this.getProjection();
@@ -320,6 +322,10 @@ var AgmOverlay = (function () {
         core_1.Input(),
         __metadata("design:type", Boolean)
     ], AgmOverlay.prototype, "openInfoWindow", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], AgmOverlay.prototype, "targetPane", void 0);
     __decorate([
         core_1.ContentChildren(core_2.AgmInfoWindow),
         __metadata("design:type", core_1.QueryList)

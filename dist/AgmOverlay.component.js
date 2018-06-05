@@ -11,6 +11,7 @@ var AgmOverlay = (function () {
         this.zIndex = 1;
         this.markerClick = new core_1.EventEmitter();
         this.openInfoWindow = true;
+        this.targetPane = "floatPane";
         this.infoWindow = new core_1.QueryList();
         this.draggable = false;
     }
@@ -99,13 +100,14 @@ var AgmOverlay = (function () {
         this.overlayView.getDiv = function () {
             return this.div;
         };
+        var me = this;
         this.overlayView.draw = function () {
             if (!this.div) {
                 this.div = elm;
                 var panes = this.getPanes();
-                if (!panes || !panes.overlayImage)
+                if (!panes || !panes[me.targetPane])
                     return;
-                panes.overlayImage.appendChild(elm);
+                panes[me.targetPane].appendChild(elm);
             }
             var latlng = new google.maps.LatLng(this.latitude, this.longitude);
             var proj = this.getProjection();
@@ -152,6 +154,7 @@ var AgmOverlay = (function () {
         "zIndex": [{ type: core_1.Input },],
         "markerClick": [{ type: core_1.Output },],
         "openInfoWindow": [{ type: core_1.Input },],
+        "targetPane": [{ type: core_1.Input },],
         "infoWindow": [{ type: core_1.ContentChildren, args: [core_2.AgmInfoWindow,] },],
         "draggable": [{ type: core_1.Input, args: ['markerDraggable',] },],
         "template": [{ type: core_1.ViewChild, args: ['content', { read: core_1.ElementRef },] },],
