@@ -166,8 +166,8 @@ declare var google: any
       const point = proj.fromLatLngToDivPixel( latlng )
 
       if (point) {
-        elm.style.left = (point.x - 10) + 'px'
-        elm.style.top = (point.y - 20) + 'px'
+        elm.style.left = point.x + 'px'
+        elm.style.top = point.y + 'px'
       }
     }
 
